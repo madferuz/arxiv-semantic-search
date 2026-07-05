@@ -1,0 +1,8 @@
+# Generated index + data (rebuildable by running embeddings.py)
+abstracts.index
+abstracts.pkl
+
+# Python
+__pycache__/
+venv/
+*.pyc
