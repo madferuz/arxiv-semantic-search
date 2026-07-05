@@ -22,7 +22,7 @@ else:
     print("Loading dataset...")
     ds = load_dataset("CShorten/ML-ArXiv-Papers", split="train")
     df = ds.to_pandas()
-    sample = df.head(1000)
+    sample = df.head(20000)
 
     print("Embedding abstracts...")
     embeddings = model.encode(
