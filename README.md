@@ -1,7 +1,7 @@
 # arXiv Semantic Search
 
 A command-line semantic search engine over machine learning research papers. Type a natural-language query and get back the most conceptually relevant arXiv abstracts — ranked by meaning, not keywords.
-
+![Search demo](docs/search_demo.png)
 Unlike a keyword search, this finds papers even when they don't share your exact words. Searching `"neural networks for image classification"` returns papers about convolutional networks, MNIST, and classification architectures, because the search matches on *meaning*.
 
 ## Example
