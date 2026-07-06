@@ -1,8 +1,8 @@
 # arXiv Semantic Search
 
-A command-line semantic search engine over 20,000 machine learning research papers. Type a natural-language query and get back the most conceptually relevant arXiv abstracts — ranked by meaning, not keywords.
+A command-line semantic search engine over machine learning research papers. Type a natural-language query and get back the most conceptually relevant arXiv abstracts — ranked by meaning, not keywords.
 
-Unlike a keyword search, this finds papers even when they don't contain your exact words. Searching `"neural networks for image classification"` returns papers about convolutional networks, MNIST, and classification architectures — because the search matches on *meaning*.
+Unlike a keyword search, this finds papers even when they don't share your exact words. Searching `"neural networks for image classification"` returns papers about convolutional networks, MNIST, and classification architectures, because the search matches on *meaning*.
 
 ## Example
 
@@ -18,64 +18,87 @@ Top 5 results for: neural networks for image classification
 2. (score 0.590) Enhanced Image Classification With a Fast-Learning Shallow Convolutional Neural Network
    We present a neural network architecture and training method designed to
    enable very rapid training and low implementation complexity...
-
-3. (score 0.569) Training Neural Networks by Using Power Linear Units (PoLUs)
-   In this paper, we introduce "Power Linear Unit" (PoLU) which increases the
-   nonlinearity capacity of a neural network...
 ```
 
 ## How it works
 
 The engine turns text into vectors and compares them geometrically:
 
-1. **Embedding** — each paper's abstract is converted into a 384-dimensional vector using the `all-MiniLM-L6-v2` sentence-transformer. Semantically similar abstracts end up close together in this vector space.
-2. **Indexing** — all vectors are stored in a [FAISS](https://github.com/facebookresearch/faiss) `IndexFlatIP` index for fast nearest-neighbor search. Because the vectors are normalized to unit length, inner-product search is mathematically equivalent to cosine similarity.
-3. **Querying** — your search string is embedded the same way, and FAISS returns the top 5 nearest abstracts, ranked by similarity score.
+1. **Embedding** — each abstract is converted into a 384-dimensional vector using the `all-MiniLM-L6-v2` sentence-transformer. Semantically similar abstracts end up close together in this vector space.
+2. **Indexing** — all vectors are stored in a [FAISS](https://github.com/facebookresearch/faiss) `IndexFlatIP` index. Because the vectors are normalized to unit length, inner-product search is mathematically equivalent to cosine similarity.
+3. **Querying** — your search string is embedded the same way, and FAISS returns the nearest abstracts, ranked by similarity score.
 
-### Persistence
+## Architecture
 
-Embedding 20,000 abstracts takes a few minutes, so the built index is saved to disk (`abstracts.index` + `abstracts.pkl`) on the first run. Every launch after that loads the index in about a second instead of re-embedding everything.
+The project separates building the index (slow, done once) from searching it (fast, done often):
 
-## Tech stack
+```
+src/arxiv_search/
+    config.py      all tunable settings in one place
+    embedder.py    text -> normalized vectors
+    index.py       build / save / load / search the FAISS index
+build_index.py     entry point: build the index once
+search.py          entry point: interactive search
+tests/             pipeline correctness tests
+```
 
-- **[sentence-transformers](https://www.sbert.net/)** — embedding model (`all-MiniLM-L6-v2`)
-- **[FAISS](https://github.com/facebookresearch/faiss)** — vector index and similarity search
-- **[Hugging Face `datasets`](https://huggingface.co/datasets/CShorten/ML-ArXiv-Papers)** — source data (`CShorten/ML-ArXiv-Papers`)
-- **pandas** — data handling
-- **Python 3.12**
+`build_index.py` embeds the abstracts and saves the index to `data/`. `search.py` loads that pre-built index and starts in about a second — it never re-embeds the dataset.
 
 ## Setup
 
 ```bash
-# clone and enter the repo
 git clone https://github.com/madferuz/arxiv-semantic-search.git
 cd arxiv-semantic-search
 
-# create and activate a virtual environment
 python3 -m venv venv
-source venv/bin/activate        # on Windows: venv\Scripts\activate
+source venv/bin/activate        # Windows: venv\Scripts\activate
 
-# install dependencies
 pip install -r requirements.txt
 ```
 
 ## Usage
 
+Build the index once (downloads the dataset and embeds it — the slow step):
+
 ```bash
-python embeddings.py
+python build_index.py
 ```
 
-On the **first run**, the script downloads the dataset and embeds 20,000 abstracts (a few minutes), then saves the index. On **subsequent runs**, it loads the saved index instantly.
+Then search as many times as you like:
 
-At the prompt, type any query and press Enter. Type `quit` to exit.
+```bash
+python search.py               # default number of results
+python search.py --top-k 10    # return 10 results per query
+```
 
-## Notes
+Type `quit` to exit.
 
-- The generated index files (`abstracts.index`, `abstracts.pkl`) are git-ignored — they're rebuilt automatically by running the script.
-- The dataset size is set by `df.head(20000)` in `embeddings.py`. Increasing it toward the full ~117K papers works the same way; just delete the saved index files first to force a rebuild.
+## Configuration
+
+Everything adjustable lives in `src/arxiv_search/config.py`: the model, how many
+papers to index (`DATASET_SIZE` — set to `None` for the full ~117K), the storage
+paths, and the default result count.
+
+## Tests
+
+```bash
+pytest
+```
+
+The tests verify the index build/save/load/search cycle, including the core
+correctness property that a vector searched against itself ranks first with a
+cosine score of 1.0. They use synthetic vectors, so they run fast and need no
+model download.
+
+## Tech stack
+
+- **[sentence-transformers](https://www.sbert.net/)** — embedding model (`all-MiniLM-L6-v2`)
+- **[FAISS](https://github.com/facebookresearch/faiss)** — vector index and similarity search
+- **[Hugging Face `datasets`](https://huggingface.co/datasets/CShorten/ML-ArXiv-Papers)** — source data
+- **pandas**, **pytest**, **Python 3.12**
 
 ## Roadmap
 
 - [ ] Scale to the full ~117K-paper dataset
-- [ ] Split into separate `build_index.py` and `search.py` commands
-- [ ] Add configurable result count (`top-k`)
+- [ ] Add result filtering by category or year
+- [ ] Optional web UI
