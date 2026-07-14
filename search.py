@@ -14,12 +14,12 @@ import argparse
 from src.arxiv_search import config, embedder, index as index_module
 
 
-def format_result(rank: int, score: float, paper) -> str:
+def format_result(rank: int, score: float, row_index: int, paper) -> str:
     """Format a single search result for printing."""
     title = paper["title"].strip()
     abstract = paper["abstract"].strip().replace("\n", " ")
     return (
-        f"\n{rank}. (score {score:.3f}) {title}\n"
+        f"\n{rank}. (row {row_index}, score {score:.3f}) {title}\n"
         f"   {abstract[:200]}..."
     )
 
@@ -53,7 +53,7 @@ def main():
 
         print(f"\nTop {args.top_k} results for: {query}")
         for rank, (score, row_index) in enumerate(results, 1):
-            print(format_result(rank, score, metadata.iloc[row_index]))
+            print(format_result(rank, score, row_index, metadata.iloc[row_index]))
 
 
 if __name__ == "__main__":
