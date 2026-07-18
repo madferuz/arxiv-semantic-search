@@ -8,6 +8,7 @@ command-line prompt in search.py with a JSON endpoint.
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from src.arxiv_search import index, embedder
@@ -25,6 +26,13 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="arXiv Semantic Search", lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["POST"],
+    allow_headers=["*"],
+)
 
 
 class SearchRequest(BaseModel):
