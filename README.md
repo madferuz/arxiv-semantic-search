@@ -2,6 +2,13 @@
 
 A command-line semantic search engine over machine learning research papers. Type a natural-language query and get back the most conceptually relevant arXiv abstracts — ranked by meaning, not keywords.
 ![Search demo](docs/search_demo.png)
+## Live demo
+
+- **App:** https://arxiv-semantic-search.vercel.app
+- **API:** https://arxiv-semantic-search.onrender.com/docs
+
+> The backend runs on a free tier that sleeps after inactivity, so the **first search may take ~50 seconds** to wake the server. Subsequent searches are fast.
+
 Unlike a keyword search, this finds papers even when they don't share your exact words. Searching `"neural networks for image classification"` returns papers about convolutional networks, MNIST, and classification architectures, because the search matches on *meaning*.
 
 ## Example
@@ -90,6 +97,23 @@ correctness property that a vector searched against itself ranks first with a
 cosine score of 1.0. They use synthetic vectors, so they run fast and need no
 model download.
 
+## Evaluation
+
+Retrieval quality is measured by `evaluate.py`, which runs a small set of
+hand-labelled queries through the pre-built index and reports precision@k.
+Ground truth maps each query to the row indices judged genuinely relevant.
+
+```bash
+python evaluate.py --top-k 5
+```
+
+Current result: **mean precision@5 = 0.467** across 3 queries.
+
+One query (`transformer attention mechanism`) scores 0.00 by design — the
+20K-paper corpus predates the transformer literature, so there are no relevant
+papers to retrieve. It's kept in the eval set as an honest example of a corpus
+limitation rather than a model failure.
+
 ## Tech stack
 
 - **[sentence-transformers](https://www.sbert.net/)** — embedding model (`all-MiniLM-L6-v2`)
@@ -101,4 +125,4 @@ model download.
 
 - [ ] Scale to the full ~117K-paper dataset
 - [ ] Add result filtering by category or year
-- [ ] Optional web UI
+- [x] Web UI (React + FastAPI, deployed ??see Live demo above)
