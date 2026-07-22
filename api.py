@@ -6,6 +6,7 @@ command-line prompt in search.py with a JSON endpoint.
 """
 
 from contextlib import asynccontextmanager
+import os
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,6 +15,7 @@ from pydantic import BaseModel
 from src.arxiv_search import index, embedder
 
 state = {}
+origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(",")
 
 
 @asynccontextmanager
@@ -29,9 +31,8 @@ app = FastAPI(title="arXiv Semantic Search", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
-    allow_origin_regex=r"https://.*\.vercel\.app",
-    allow_methods=["POST"],
+    allow_origins=origins,
+    allow_methods=["POST", "OPTIONS"],
     allow_headers=["*"],
 )
 

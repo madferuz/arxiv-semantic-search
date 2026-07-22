@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import './App.css'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+
 function App() {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState([])
@@ -21,7 +23,7 @@ function App() {
     setError('')
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL ?? 'http://localhost:8000'}/search`, {
+      const res = await fetch(`${API_URL}/search`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: trimmedQuery, top_k: 5 }),
