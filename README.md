@@ -1,11 +1,11 @@
 # arXiv Semantic Search
 
-A command-line semantic search engine over machine learning research papers. Type a natural-language query and get back the most conceptually relevant arXiv abstracts  - ranked by meaning, not keywords.
-![Search demo](docs/search_demo.png)
+A semantic search engine over machine learning research papers. Type a natural-language query and get back the most conceptually relevant arXiv abstracts  - ranked by meaning, not keywords.
+![Web UI](docs/web_demo.png)
 ## Live demo
 
 - **App:** https://arxiv-semantic-search.vercel.app
-- **API:** https://arxiv-semantic-search.onrender.com/docs
+- **API:** https://arxiv-semantic-api.onrender.com/docs
 
 > The backend runs on a free tier that sleeps after inactivity, so the **first search may take ~50 seconds** to wake the server. Subsequent searches are fast.
 
@@ -115,10 +115,13 @@ papers to retrieve. It's kept in the eval set as an honest example of a corpus
 limitation rather than a model failure.
 
 ## Tech stack
-
+- **FastAPI**  - backend API
+- **React + Vite**  - frontend
+- **Docker**  - containerizes the backend
+- **Render** / **Vercel**  - backend / frontend hosting
 - **[sentence-transformers](https://www.sbert.net/)**  - embedding model (`all-MiniLM-L6-v2`)
 - **[FAISS](https://github.com/facebookresearch/faiss)**  - vector index and similarity search
-- **[Hugging Face `datasets`](https://huggingface.co/datasets/CShorten/ML-ArXiv-Papers)**  - source data
+- **[Hugging Face `datasets`](https://huggingface.co/datasets/CShorten/ML-ArXiv-Papers)**  - source data (build-time only, not a runtime dependency)
 - **pandas**, **pytest**, **Python 3.12**
 
 ## Roadmap
