@@ -1,7 +1,7 @@
 # arXiv Semantic Search
 
 A semantic search engine over machine learning research papers. Type a natural-language query and get back the most conceptually relevant arXiv abstracts  - ranked by meaning, not keywords.
-![Search demo](docs/search_demo.png)
+![Web UI](docs/web_demo.png)
 ## Live demo
 
 - **App:** https://arxiv-semantic-search.vercel.app
