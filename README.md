@@ -115,13 +115,13 @@ papers to retrieve. It's kept in the eval set as an honest example of a corpus
 limitation rather than a model failure.
 
 ## Tech stack
-FastAPI (the backend API)
-React + Vite (the frontend)
-Docker (containerizes the backend)
-Render (backend hosting) and Vercel (frontend hosting)
+- **FastAPI**  - backend API
+- **React + Vite**  - frontend
+- **Docker**  - containerizes the backend
+- **Render** / **Vercel**  - backend / frontend hosting
 - **[sentence-transformers](https://www.sbert.net/)**  - embedding model (`all-MiniLM-L6-v2`)
 - **[FAISS](https://github.com/facebookresearch/faiss)**  - vector index and similarity search
-- **[Hugging Face `datasets`](https://huggingface.co/datasets/CShorten/ML-ArXiv-Papers)**  - source data
+- **[Hugging Face `datasets`](https://huggingface.co/datasets/CShorten/ML-ArXiv-Papers)**  - source data (build-time only, not a runtime dependency) - source data
 - **pandas**, **pytest**, **Python 3.12**
 
 ## Roadmap
