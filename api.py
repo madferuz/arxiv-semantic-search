@@ -46,9 +46,9 @@ def health():
     return {"status": "ok"}
 
 
-@app.get("/debug-origins")
-def debug_origins():
-    return {"origins": origins}
+@app.get("/")
+def root():
+    return {"service": "arXiv Semantic Search API", "docs": "/docs"}
 
 
 @app.post("/search")
