@@ -1,6 +1,6 @@
 # arXiv Semantic Search
 
-A command-line semantic search engine over machine learning research papers. Type a natural-language query and get back the most conceptually relevant arXiv abstracts  - ranked by meaning, not keywords.
+A semantic search engine over machine learning research papers. Type a natural-language query and get back the most conceptually relevant arXiv abstracts  - ranked by meaning, not keywords.
 ![Search demo](docs/search_demo.png)
 ## Live demo
 
@@ -115,7 +115,10 @@ papers to retrieve. It's kept in the eval set as an honest example of a corpus
 limitation rather than a model failure.
 
 ## Tech stack
-
+FastAPI (the backend API)
+React + Vite (the frontend)
+Docker (containerizes the backend)
+Render (backend hosting) and Vercel (frontend hosting)
 - **[sentence-transformers](https://www.sbert.net/)**  - embedding model (`all-MiniLM-L6-v2`)
 - **[FAISS](https://github.com/facebookresearch/faiss)**  - vector index and similarity search
 - **[Hugging Face `datasets`](https://huggingface.co/datasets/CShorten/ML-ArXiv-Papers)**  - source data
