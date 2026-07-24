@@ -1,7 +1,6 @@
 # Generated index + data (rebuildable by running embeddings.py)
 abstracts.index
 abstracts.pkl
-data/*
 
 # Python
 venv/
