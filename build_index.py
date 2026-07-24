@@ -16,6 +16,7 @@ def main():
     print(f"Loading dataset '{config.DATASET_NAME}'...")
     ds = load_dataset(config.DATASET_NAME, split="train")
     df = ds.to_pandas()
+    df = df[["title", "abstract"]]
 
     if config.DATASET_SIZE is not None:
         df = df.head(config.DATASET_SIZE)
