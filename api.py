@@ -46,6 +46,11 @@ def health():
     return {"status": "ok"}
 
 
+@app.get("/debug-origins")
+def debug_origins():
+    return {"origins": origins}
+
+
 @app.post("/search")
 def search(req: SearchRequest):
     query_embedding = embedder.embed_texts(state["model"], [req.query])
