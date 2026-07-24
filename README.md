@@ -5,7 +5,7 @@ A command-line semantic search engine over machine learning research papers. Typ
 ## Live demo
 
 - **App:** https://arxiv-semantic-search.vercel.app
-- **API:** https://arxiv-semantic-search.onrender.com/docs
+- **API:** https://arxiv-semantic-api.onrender.com/docs
 
 > The backend runs on a free tier that sleeps after inactivity, so the **first search may take ~50 seconds** to wake the server. Subsequent searches are fast.
 
