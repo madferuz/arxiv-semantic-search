@@ -121,7 +121,7 @@ limitation rather than a model failure.
 - **Render** / **Vercel**  - backend / frontend hosting
 - **[sentence-transformers](https://www.sbert.net/)**  - embedding model (`all-MiniLM-L6-v2`)
 - **[FAISS](https://github.com/facebookresearch/faiss)**  - vector index and similarity search
-- **[Hugging Face `datasets`](https://huggingface.co/datasets/CShorten/ML-ArXiv-Papers)**  - source data (build-time only, not a runtime dependency) - source data
+- **[Hugging Face `datasets`](https://huggingface.co/datasets/CShorten/ML-ArXiv-Papers)**  - source data (build-time only, not a runtime dependency)
 - **pandas**, **pytest**, **Python 3.12**
 
 ## Roadmap
